@@ -1,0 +1,8 @@
+---
+redis:
+  url: 'redis://127.0.0.1/10'
+  pool:
+    size: 4
+    timeout: 5
+database:
+  url: "postgres://127.0.0.1/myapp_dev"

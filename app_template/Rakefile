@@ -1,0 +1,16 @@
+require_relative 'config/environment'
+
+MyApp.i.boot!
+
+Sequel.extension :migration
+
+task :migrate do
+  Grande.logger.info("Running all migrations")
+
+  migration_target = ENV.fetch('MIGRATION_TARGET', nil)
+  migrations_path = File.join(Grande.c.app.root_path, 'db/migrations')
+
+  db = Grande.c.app.db
+
+  Sequel::Migrator.run(db, migrations_path, target: migration_target)
+end

@@ -1,0 +1,52 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
+
+# :-)
+gem 'grande'
+
+# Web/Api framework
+gem 'sinatra'
+gem 'sinatra-contrib'
+
+# Perform HTTP requests
+gem 'excon'
+
+# Marshalling
+gem 'oj'
+gem 'multi_json'
+gem 'redis'
+gem 'connection_pool'
+# gem 'nokogiri'
+# gem 'loofah'
+
+# Data access
+gem 'pg'
+gem 'sequel'
+
+# Server stuff
+gem 'rake'
+gem 'puma'
+gem 'racksh'
+
+# German stuff
+gem 'zeitwerk'
+
+# Crypto
+# gem 'rbnacl'
+# gem 'bcrypt'
+
+# Load configuration
+gem 'dotenv'
+
+group :development, :test do
+  gem 'pry'
+  gem 'pry-byebug'
+end
+
+group :test do
+  gem 'rspec', require: false
+  gem 'webmock', require: false
+end
