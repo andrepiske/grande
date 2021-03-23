@@ -1,4 +1,6 @@
 
+preload_app!
+
 nakayoshi_fork true
 
 after_worker_fork do

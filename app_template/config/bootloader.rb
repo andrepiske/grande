@@ -8,9 +8,13 @@ require 'grande/use_redis'
 require 'grande/use_sequel'
 require 'grande/use_sequel_with_pg'
 
+require 'grande/with_config_loader'
+
 class MyApp
   attr_reader :env
   attr_reader :logger
+
+  include Grande::WithConfigLoader
 
   include Grande::UseRedis
   include Grande::UseSequel
@@ -40,14 +44,14 @@ class MyApp
     logger.info("Booting app with Grande in #{@env} environment")
 
     Grande.c.set_app(self)
-    @config_loader = Grande::ConfigLoader.new
 
-    setup_db_connections
+    with_config_loader do
+      setup_db_connections
 
-    load_config
+      load_config
+    end
 
     @boot = :booted
-    @config_loader = nil # Config doesn't need to be kept in memory after it's loaded. Free up some memory here
   end
 
   def booting?; @boot == :booting; end
@@ -57,6 +61,10 @@ class MyApp
     setup_redis_connection if respond_to?(:setup_redis_connection)
 
     setup_sequel_connection if respond_to?(:setup_sequel_connection)
+  end
+
+  def restore_db_connections_after_fork
+    with_config_loader { setup_db_connections }
   end
 
   private

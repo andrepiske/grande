@@ -27,6 +27,6 @@ class Grande::Context
   # If one is using forking servers,
   # this could should be run to re-setup all DB connections
   def run_after_fork
-    @app.setup_db_connections
+    @app.restore_db_connections_after_fork
   end
 end
