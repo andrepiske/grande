@@ -17,7 +17,7 @@ ENV['RACK_ENV'].to_sym.tap do |running_env|
   Bundler.require(:default, running_env)
 end
 
-Zeitwerk::Loader.new.tap do |loader|
+zw_loader = Zeitwerk::Loader.new.tap do |loader|
   root_path = File.expand_path('..', __dir__)
   autoload_paths = [
     'app',
@@ -29,7 +29,6 @@ Zeitwerk::Loader.new.tap do |loader|
   end
 
   loader.setup
-  loader.eager_load if ENV['RACK_ENV'] == 'production'
 end
 
 require 'grande/environment'
@@ -37,6 +36,7 @@ require 'grande/environment'
 require 'time'
 require 'date'
 
+require 'logger'
 # require 'openssl'
 
 if ENV['RACK_ENV'] == 'development'
@@ -45,3 +45,5 @@ if ENV['RACK_ENV'] == 'development'
 end
 
 require_relative './bootloader'
+
+zw_loader.eager_load if ENV['RACK_ENV'] == 'production'
