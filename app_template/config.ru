@@ -1,5 +1,3 @@
-require_relative 'config/environment'
-
-MyApp.i.boot!
+require_relative 'config/boot'
 
 run MyRackApp

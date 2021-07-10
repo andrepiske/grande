@@ -44,6 +44,6 @@ if ENV['RACK_ENV'] == 'development'
   require 'pry-byebug'
 end
 
-require_relative './bootloader'
+require_relative './application'
 
 zw_loader.eager_load if ENV['RACK_ENV'] == 'production'
