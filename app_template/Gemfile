@@ -38,8 +38,8 @@ gem 'zeitwerk'
 # gem 'rbnacl'
 # gem 'bcrypt'
 
-# Load configuration
-gem 'dotenv'
+# Configuration loading
+gem 'comff'
 
 group :development, :test do
   gem 'pry'

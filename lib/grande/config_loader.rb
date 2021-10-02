@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 require 'yaml'
+require 'comff'
 
 class Grande::ConfigLoader
+  attr_reader :comff
+
   def initialize
-    @conf = nil
+    @comff = nil
 
     default_path = File.join(Grande.c.app.root_path, 'config/config.yml')
 
@@ -23,51 +26,17 @@ class Grande::ConfigLoader
     end
   end
 
-  def get_int(key, default=nil)
-    value = get_str(key)
-    return default if value == nil
-    Integer(value)
-  end
-
-  def get_int!(key)
-    value = get_int(key)
-    raise "Config key #{key} is required" unless value
-    Integer(value)
-  end
-
-  def get_str(key, default=nil)
-    env_var_name = key_to_env_var_name(key)
-    return ENV[env_var_name] if ENV.key?(env_var_name)
-
-    parts = key.split('.')
-    base_obj = if parts.length == 1
-      @conf
-    else
-      @conf.dig(*parts[0...-1])
-    end
-
-    # binding.pry if key =="redis.url"
-
-    base_obj.fetch(parts.last, default)
-  end
-
-  def get_str!(key)
-    none = Object.new
-    value = get_str(key, none)
-    raise "Config key #{key} is required" if value == none
-
-    value
-  end
+  def get_int(*a, **kw); @comff.get_int(*a, **kw); end
+  def get_int!(*a, **kw); @comff.get_int!(*a, **kw); end
+  def get_str(*a, **kw); @comff.get_str(*a, **kw); end
+  def get_str!(*a, **kw); @comff.get_str!(*a, **kw); end
+  def get_bool(*a, **kw); @comff.get_bool(*a, **kw); end
+  def get_bool!(*a, **kw); @comff.get_bool!(*a, **kw); end
 
   private
 
-  # Convert key format from foo.bar.qux
-  # into FOO_BAR_QUX
-  def key_to_env_var_name(key)
-    key.split('.').map(&:upcase).join('_')
-  end
-
   def load_conf_file!(path)
-    @conf = YAML.safe_load(File.read(path))
+    configuration = YAML.safe_load(File.read(path))
+    @comff = Comff.new(configuration)
   end
 end
