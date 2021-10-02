@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'yaml'
 require 'comff'
 
 class Grande::ConfigLoader
@@ -36,7 +35,7 @@ class Grande::ConfigLoader
   private
 
   def load_conf_file!(path)
-    configuration = YAML.safe_load(File.read(path))
+    configuration = File.read(path)
     @comff = Comff.new(configuration)
   end
 end
